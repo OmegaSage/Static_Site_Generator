@@ -1,5 +1,5 @@
 class HTMLNode:
-    def __init__(self, tag: str | None , value: str | None, children: list | None, props: dict | None) -> None:
+    def __init__(self, tag: str | None , value: str | None, children: list | None, props: dict | None = None) -> None:
         self.tag = None
         self.value = None
         self.children = None
@@ -9,7 +9,7 @@ class HTMLNode:
         if value:
             self.value = value
         if children:
-            self.childrem = children
+            self.children = children
         if props:
             self.props = props
 
@@ -26,3 +26,26 @@ class HTMLNode:
 
     def __repr__(self) -> str:
         return f'HTMLNode({self.tag}, {self.value}, {self.children}, {self.props})'
+
+class LeafNode(HTMLNode):
+    def __init__(self, tag: str, value: str, props: dict | None = None) -> None:
+        super().__init__(tag, value, children=None, props=props)
+        #self.tag = tag
+        #self.value = value
+        #self.props = None
+        #if props:
+            #self.props = props
+        #super().__init__(tag, value, None, props)
+
+    def to_html(self) -> str:
+        if not self.value:
+            raise ValueError
+        if not self.tag:
+            return self.value
+        elif self.props:
+            return f'<{self.tag}{self.props_to_html()}>{self.value}</{self.tag}>'
+        else:
+            return f'<{self.tag}>{self.value}</{self.tag}>'
+
+    def __repr__(self):
+        return f'LeafNode({self.tag}, {self.value}, {self.props})'
